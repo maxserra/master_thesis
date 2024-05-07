@@ -1,10 +1,14 @@
-master_thesis
-==============================
+# MSc Thesis repository
+
 
 Repository for compiling all relevant code and data for my MSc thesis
 
-Project Organization
-------------
+## Data sources
+- https://zenodo.org/record/7714885 goes to `data/raw/ISIMIP_2b_aggregated_variables`
+- Project specific data for the ISIMIP3 runs, provided by Ting Tang Yoshihide Wada (currently at KAUST) goes to `data/raw/CWatM_ISIMIP3_4Thorsten`
+
+
+## Project Organization
 
     ├── data
     │   ├── external       <- Data from third party sources.
