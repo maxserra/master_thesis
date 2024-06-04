@@ -7,7 +7,9 @@ def plot_scatter_with_dropdown(df: pd.DataFrame,
                                default_x: str,
                                default_y: str,
                                valid_x: List[str] = None,
-                               valid_y: List[str] = None):
+                               valid_y: List[str] = None,
+                               layout_height: int = 500,
+                               layout_width: int = 800):
 
     # Check and prepare variables
     if (default_x not in df.columns) or (default_y not in df.columns):
@@ -23,8 +25,8 @@ def plot_scatter_with_dropdown(df: pd.DataFrame,
     fig = go.Figure()
 
     fig.update_layout(title="title here",
-                      height=500,
-                      width=800,
+                      height=layout_height,
+                      width=layout_width,
                       xaxis_title="dddd",
                       yaxis_title="aaa",
                       showlegend=False)
