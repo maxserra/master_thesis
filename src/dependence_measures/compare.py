@@ -39,7 +39,7 @@ def compute_bivariate_scores(df: pd.DataFrame,
                                                         df[output_col].values)
 
         # maximal information coefficent
-        mic_score = bivariate.maximal_information_coefficient(df[input_col], df[output_col])
+        mic_scores = bivariate.maximal_information_coefficient(df[input_col], df[output_col])
 
 
         records.append({"input": input_col,
@@ -48,7 +48,11 @@ def compute_bivariate_scores(df: pd.DataFrame,
                         "spearman": spearman_score,
                         "maximal correlation (SVD)": mc_score,
                         "mutual information (sklearn)": mi_score,
-                        "maximal information coefficient": mic_score})
+                        "MIC": mic_scores["MIC"],
+                        "MAS": mic_scores["MAS"],
+                        "MEV": mic_scores["MEV"],
+                        "MCN_general": mic_scores["MCN_general"],
+                        "TIC": mic_scores["TIC"]})
     
     records_df = pd.DataFrame.from_records(records)
     records_df.set_index(["input", "output"], inplace=True)

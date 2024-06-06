@@ -1,3 +1,4 @@
+from typing import Dict
 import math
 import numpy as np
 from scipy import stats
@@ -13,7 +14,9 @@ def spearman(x, y):
     return stats.spearmanr(x, y).statistic
 
 
-def _maxCorr(data, X, Y):  # inspired by https://github.com/tokamaster/maximal-correlation/blob/main/correlation/maxcorr.py
+def _maxCorr(data, X, Y):  # NOT USED
+    # taken from https://github.com/tokamaster/maximal-correlation/blob/main/correlation/maxcorr.py
+    
     # inputs = data with x in col 1 and y in col 2, alphabets X and Y
     lx = len(X)
     ly = len(Y)
@@ -42,7 +45,7 @@ def _maxCorr(data, X, Y):  # inspired by https://github.com/tokamaster/maximal-c
 def maximal_correlation_SVD(x, y,
                             n_bins: int = 10):
 
-    Pxy = np.histogram2d(x, y, bins=n_bins)[0].T
+    Pxy = np.histogram2d(x, y, bins=n_bins)[0]
     Pxy = Pxy / Pxy.sum()
     Px = Pxy.sum(axis=0)
     Py = Pxy.sum(axis=1)
@@ -60,8 +63,12 @@ def mutual_information_sklearn(x, y):
     return mutual_info_regression(x, y)[0]
 
 
-def maximal_information_coefficient(x, y):
-    mine = MINE()
+def maximal_information_coefficient(x, y) -> Dict[str, float]:
+    mine = MINE(alpha=0.6, c=15, est="mic_approx")
     mine.compute_score(x, y)
 
-    return mine.mic()
+    return {"MIC": mine.mic(),
+            "MAS": mine.mas(),
+            "MEV": mine.mev(),
+            "MCN_general": mine.mcn_general(),
+            "TIC": mine.tic(norm=True)}
