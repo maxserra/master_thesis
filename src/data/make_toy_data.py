@@ -13,96 +13,112 @@ def linear(n_samples: int,
            noise_amplitude: float = None) -> np.ndarray:
     
     x = np.random.uniform(size=n_samples)
-    y = x.copy()
+    y_0 = x
 
     if noise_amplitude is not None:
-        y += (noise_amplitude * np.random.uniform(size=n_samples)) - noise_amplitude / 2
+        y = y_0 + (noise_amplitude * np.random.uniform(size=n_samples)) - noise_amplitude / 2
+    else:
+        y = y_0
 
-    return np.array(list(zip(x, y)))
+    return np.array(list(zip(x, y, y_0)))
 
 
 def parabolic(n_samples: int,
               noise_amplitude: float = None) -> np.ndarray:
     
     x = np.random.uniform(low=-1/2, high=1/2, size=n_samples)
-    y = 4 * x.copy()**2
+    y_0 = 4 * x.copy()**2
 
     if noise_amplitude is not None:
-        y += (noise_amplitude * np.random.uniform(size=n_samples)) - noise_amplitude / 2
+        y = y_0 + (noise_amplitude * np.random.uniform(size=n_samples)) - noise_amplitude / 2
+    else:
+        y = y_0
 
-    return np.array(list(zip(x, y)))
+    return np.array(list(zip(x, y, y_0)))
 
 
 def cubic(n_samples: int,
           noise_amplitude: float = None) -> np.ndarray:
     
     x = np.random.uniform(low=-1.3, high=1.1, size=n_samples)
-    y = 4 * x.copy()**3 + x.copy()**2 - 4 * x.copy()
+    y_0 = 4 * x.copy()**3 + x.copy()**2 - 4 * x.copy()
 
     if noise_amplitude is not None:
-        y += (noise_amplitude * np.random.uniform(size=n_samples)) - noise_amplitude / 2
+        y = y_0 + (noise_amplitude * np.random.uniform(size=n_samples)) - noise_amplitude / 2
+    else:
+        y = y_0
 
-    return np.array(list(zip(x, y)))
+    return np.array(list(zip(x, y, y_0)))
 
 
 def exponential(n_samples: int,
                 noise_amplitude: float = None) -> np.ndarray:
     
     x = np.random.uniform(size=n_samples)
-    y = 10**(10 * x.copy()) - 1
+    y_0 = 10**(10 * x.copy()) - 1
 
     if noise_amplitude is not None:
-        y += (noise_amplitude * np.random.uniform(size=n_samples)) - noise_amplitude / 2
+        y = y_0 + (noise_amplitude * np.random.uniform(size=n_samples)) - noise_amplitude / 2
+    else:
+        y = y_0
 
-    return np.array(list(zip(x, y)))
+    return np.array(list(zip(x, y, y_0)))
 
 
 def linear_periodic_med_freq(n_samples: int,
                              noise_amplitude: float = None) -> np.ndarray:
     
     x = np.random.uniform(size=n_samples)
-    y = np.sin(10 * np.pi * x.copy()) + x.copy()
+    y_0 = np.sin(10 * np.pi * x.copy()) + x.copy()
 
     if noise_amplitude is not None:
-        y += (noise_amplitude * np.random.uniform(size=n_samples)) - noise_amplitude / 2
+        y = y_0 + (noise_amplitude * np.random.uniform(size=n_samples)) - noise_amplitude / 2
+    else:
+        y = y_0
 
-    return np.array(list(zip(x, y)))
+    return np.array(list(zip(x, y, y_0)))
 
 
 def sinus_fourier(n_samples: int,
                   noise_amplitude: float = None) -> np.ndarray:
     
     x = np.random.uniform(size=n_samples)
-    y = np.sin(16 * np.pi * x.copy())
+    y_0 = np.sin(16 * np.pi * x.copy())
 
     if noise_amplitude is not None:
-        y += (noise_amplitude * np.random.uniform(size=n_samples)) - noise_amplitude / 2
+        y = y_0 + (noise_amplitude * np.random.uniform(size=n_samples)) - noise_amplitude / 2
+    else:
+        y = y_0
 
-    return np.array(list(zip(x, y)))
+    return np.array(list(zip(x, y, y_0)))
 
 
 def sinus_non_fourier(n_samples: int,
                       noise_amplitude: float = None) -> np.ndarray:
     
     x = np.random.uniform(size=n_samples)
-    y = np.sin(13 * np.pi * x.copy())
+    y_0 = np.sin(13 * np.pi * x.copy())
 
     if noise_amplitude is not None:
-        y += (noise_amplitude * np.random.uniform(size=n_samples)) - noise_amplitude / 2
+        y = y_0 + (noise_amplitude * np.random.uniform(size=n_samples)) - noise_amplitude / 2
+    else:
+        y = y_0
 
-    return np.array(list(zip(x, y)))
+    return np.array(list(zip(x, y, y_0)))
 
 
 def sinus_varying(n_samples: int,
                   noise_amplitude: float = None) -> np.ndarray:
     
     x = np.random.uniform(size=n_samples)
-    y = np.sin(7 * np.pi * x.copy() * (1 + x.copy()))
+    y_0 = np.sin(7 * np.pi * x.copy() * (1 + x.copy()))
 
     if noise_amplitude is not None:
-        y += (noise_amplitude * np.random.uniform(size=n_samples)) - noise_amplitude / 2
+        y = y_0 + (noise_amplitude * np.random.uniform(size=n_samples)) - noise_amplitude / 2
+    else:
+        y = y_0
 
-    return np.array(list(zip(x, y)))
+    return np.array(list(zip(x, y, y_0)))
 
 
 def categorical(n_samples: int) -> np.ndarray:
