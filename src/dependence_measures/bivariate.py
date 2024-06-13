@@ -3,6 +3,7 @@ import math
 import numpy as np
 from scipy import stats
 from sklearn.feature_selection import mutual_info_regression
+from sklearn.metrics import r2_score
 from minepy import MINE
 
 
@@ -72,3 +73,7 @@ def maximal_information_coefficient(x, y) -> Dict[str, float]:
             "MEV": mine.mev(),
             "MCN_general": mine.mcn_general(),
             "TIC": mine.tic(norm=True)}
+
+
+def coefficient_of_determination_R2(y_noiseless, y_observed):
+    return r2_score(y_true=y_observed, y_pred=y_noiseless)
