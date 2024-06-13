@@ -7,8 +7,8 @@ from src.dependence_measures import bivariate
 
 
 def compute_bivariate_scores(df: pd.DataFrame,
-                              input_cols: List[str],
-                              output_cols: List[str]) -> pd.DataFrame:
+                             input_cols: List[str],
+                             output_cols: List[str]) -> pd.DataFrame:
     """_summary_
 
     Args:
@@ -42,17 +42,19 @@ def compute_bivariate_scores(df: pd.DataFrame,
         mic_scores = bivariate.maximal_information_coefficient(df[input_col], df[output_col])
 
 
-        records.append({"input": input_col,
-                        "output": output_col,
-                        "pearson": pearson_score,
-                        "spearman": spearman_score,
-                        "maximal correlation (SVD)": mc_score,
-                        "mutual information (sklearn)": mi_score,
-                        "MIC": mic_scores["MIC"],
-                        "MAS": mic_scores["MAS"],
-                        "MEV": mic_scores["MEV"],
-                        "MCN_general": mic_scores["MCN_general"],
-                        "TIC": mic_scores["TIC"]})
+        records.append({
+            "input": input_col,
+            "output": output_col,
+            "pearson": pearson_score,
+            "spearman": spearman_score,
+            "maximal correlation (SVD)": mc_score,
+            "mutual information (sklearn)": mi_score,
+            "MIC": mic_scores["MIC"],
+            # "MAS": mic_scores["MAS"],
+            # "MEV": mic_scores["MEV"],
+            # "MCN_general": mic_scores["MCN_general"],
+            # "TIC": mic_scores["TIC"],
+        })
     
     records_df = pd.DataFrame.from_records(records)
     records_df.set_index(["input", "output"], inplace=True)
