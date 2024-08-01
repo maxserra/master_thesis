@@ -1,6 +1,6 @@
 from typing import List
 from itertools import product
-
+from tqdm import tqdm
 import pandas as pd
 
 from src.dependence_measures import bivariate
@@ -23,7 +23,7 @@ def compute_bivariate_scores(df: pd.DataFrame,
     records = []
     combinations = product(input_cols, output_cols)
 
-    for input_col, output_col in combinations:
+    for input_col, output_col in tqdm(list(combinations), desc="Computing input-output combinations"):
 
         # pearson
         pearson_score = bivariate.pearson(df[input_col], df[output_col])
