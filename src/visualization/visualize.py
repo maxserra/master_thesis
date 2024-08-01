@@ -27,15 +27,22 @@ def plot_scatter_with_dropdown(df: pd.DataFrame,
     fig.update_layout(title="title here",
                       height=layout_height,
                       width=layout_width,
-                      xaxis_title="dddd",
-                      yaxis_title="aaa",
+                      xaxis_title=default_x,
+                      yaxis_title=default_y,
                       showlegend=False)
 
     fig.add_trace(go.Scatter(x=df[default_x],
                              y=df[default_y],
-                             mode="markers"))
+                             mode="markers",
+                             marker={
+                                "colorscale": "Viridis",
+                                "opacity": 0.2,
+                                "line": {"color": "black", "width": 0.25},
+                                "color": df[default_x],
+                                "colorbar": {"title": default_x}
+                             }))
 
-    buttons_row, buttons_col = [], []
+    buttons_row, buttons_col, buttons_color = [], [], []
 
     for row in valid_x:
 
@@ -43,8 +50,8 @@ def plot_scatter_with_dropdown(df: pd.DataFrame,
             "label": row,
             "method": "update",
             "args": [{"x": [df[row]],
-                        "type": "scatter"},
-                        {"xaxis": {"title": row}}],
+                      "type": "scatter"},
+                     {"xaxis": {"title": row}}],
         })
 
     for col in valid_y:
@@ -53,8 +60,19 @@ def plot_scatter_with_dropdown(df: pd.DataFrame,
             "label": col,
             "method": "update",
             "args": [{"y": [df[col]],
-                        "type": "scatter"},
-                        {"yaxis": {"title": col}}],
+                      "type": "scatter"},
+                     {"yaxis": {"title": col}}],
+        })
+
+    for col in valid_x + valid_y:
+
+        buttons_color.append({
+            "label": col,
+            "method": "update",
+            "args": [{"marker": {"colorscale": "Viridis",
+                                 "opacity": 0.25,
+                                 "color": df[col],
+                                 "colorbar": {"title": col}}}]
         })
 
     fig.update_layout(
@@ -80,6 +98,17 @@ def plot_scatter_with_dropdown(df: pd.DataFrame,
                 "xanchor": "center",
                 "y": 1.2,
                 "yanchor": "top"
+            },
+            {
+                "active": False,
+                "buttons": buttons_color,
+                "direction": "down",
+                "pad": {"r": 10, "t": 10},
+                "showactive": True,
+                "x": 0.85,
+                "xanchor": "center",
+                "y": 1.2,
+                "yanchor": "top"
             }
         ],
         annotations=[
@@ -96,6 +125,15 @@ def plot_scatter_with_dropdown(df: pd.DataFrame,
             {
                 "text": "Y variable",
                 "x": 0.65,
+                "xref": "paper",
+                "y": 1.25,
+                "yref": "paper",
+                "align": "left",
+                "showarrow": False
+            },
+            {
+                "text": "color",
+                "x": 0.85,
                 "xref": "paper",
                 "y": 1.25,
                 "yref": "paper",
