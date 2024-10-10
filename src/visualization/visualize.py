@@ -1,6 +1,10 @@
 from typing import List
 import pandas as pd
+import matplotlib.pyplot as plt
+from matplotlib.ticker import MaxNLocator
 import plotly.graph_objects as go
+
+import src.data.utils as utils
 
 
 def plot_scatter_with_dropdown(df: pd.DataFrame,
@@ -144,3 +148,118 @@ def plot_scatter_with_dropdown(df: pd.DataFrame,
     )
 
     fig.show()
+
+
+def plot_metric_values_and_rank(scores_df: pd.DataFrame,
+                                metrics: List[str],
+                                sort_values_by: str):
+
+    scores_df = scores_df[metrics].sort_values(sort_values_by, ascending=False)
+
+    scores_df_rank = scores_df.rank(axis=0)
+
+    fig, axis = plt.subplots(nrows=1, ncols=2, figsize=(12, 6))
+
+    axis[0].plot(scores_df.T,
+                 marker="o")
+    axis[0].set_title("Metrics value")
+    axis[0].set_xlabel("Metric")
+    axis[0].set_ylabel("Value")
+    axis[1].plot(scores_df_rank.T,
+                 label=list(scores_df_rank.T.columns),
+                 marker="o")
+    axis[1].set_title("Metrics rank")
+    axis[1].set_xlabel("Metric")
+    axis[1].set_ylabel("Rank")
+    axis[1].yaxis.set_major_locator(MaxNLocator(integer=True))
+    axis[1].legend(loc="lower right")
+
+    fig.tight_layout()
+    return fig
+
+
+def plot_metric_values_and_rank_with_shuffle(scores_df: pd.DataFrame,
+                                             metrics: List[str],
+                                             shuffle_scores_df_list: List[pd.DataFrame],
+                                             sort_values_by: str):
+
+    scores_df = scores_df[metrics].sort_values(sort_values_by, ascending=False)
+    scores_df_rank = scores_df.rank(axis=0)
+
+    prop_cycle = plt.rcParams['axes.prop_cycle']
+    colors = prop_cycle.by_key()['color']
+
+    fig, axis = plt.subplots(nrows=1, ncols=2, figsize=(12, 6))
+
+    for i, col in enumerate(scores_df.T):
+        axis[0].plot(metrics,
+                     scores_df.T[col],
+                     marker="o",
+                     color=colors[i]
+                     )
+    axis[0].set_title("Metrics value")
+    axis[0].set_xlabel("Metric")
+    axis[0].set_ylabel("Value")
+
+    for j in range(len(shuffle_scores_df_list)):
+
+        shuffle_scores_df = shuffle_scores_df_list[j][metrics]
+
+        for i, col in enumerate(shuffle_scores_df.T):
+            axis[0].plot(metrics,
+                         shuffle_scores_df.T[col],
+                         alpha=0.2,
+                         color=colors[i] # this is wrong, ordering is not matched to scores_df! TODO
+                         )
+
+    axis[1].plot(scores_df_rank.T,
+                 label=list(scores_df_rank.T.columns),
+                 marker="o")
+    axis[1].set_title("Metrics rank")
+    axis[1].set_xlabel("Metric")
+    axis[1].set_ylabel("Rank")
+    axis[1].yaxis.set_major_locator(MaxNLocator(integer=True))
+    axis[1].legend(loc="lower right")
+
+    fig.tight_layout()
+    return fig
+
+
+def plot_metric_baseline_and_value(
+    scores_df: pd.DataFrame,
+    metrics: List[str],
+    shuffle_scores_df_list: List[pd.DataFrame],
+    sort_values_by: str
+):
+
+    fig, axis = plt.subplots(nrows=1, ncols=len(metrics),
+                             sharey=True,
+                             figsize=(14, 4))
+
+    for i, metric in enumerate(metrics):
+
+        metric_value = scores_df.sort_values(sort_values_by, ascending=True)[metric]
+        metric_baseline_values = utils.get_metric_from_df_list(shuffle_scores_df_list, metric)
+
+        metric_all = pd.concat([metric_value.rename("value", inplace=True), metric_baseline_values], axis=1)
+
+        import numpy as np
+
+        axis[i].set_title(f"{metric}")
+        axis[i].boxplot(metric_all.T,
+                        vert=False,
+                        labels=[str(index) for index in metric_all.index],
+                        )
+        axis[i].scatter(x=metric_value.values,
+                        y=np.arange(len(metric_value)) + 1,
+                        marker="X", c="red", s=100)
+        axis[i].grid(axis="x")
+
+        # for j, index in enumerate(metric_value.index):
+
+        #     axis[j, i].set_title(f"{metric} for {index}")
+
+
+
+    fig.tight_layout()
+    return fig
