@@ -124,6 +124,8 @@ def normalized_mutual_information(x, y, bins=None):
     The NMI is calculated using the entropies of x, y, and their joint entropy:
     NMI = 2 * (H(X) + H(Y) - H(X,Y)) / (H(X) + H(Y))
 
+    See Taormine et al 2016
+
     Parameters:
     - x: array-like, shape (n_samples,)
         First variable (can be continuous or discrete).
