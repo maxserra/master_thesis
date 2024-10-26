@@ -2,7 +2,6 @@ from typing import Dict
 import math
 import numpy as np
 from scipy import stats
-from sklearn.feature_selection import mutual_info_regression
 from sklearn.metrics import r2_score
 from minepy import MINE
 
@@ -58,10 +57,6 @@ def maximal_correlation_SVD(x, y,
     U, S, V = np.linalg.svd(B)
 
     return S[1]
-
-
-def mutual_information_sklearn(x, y):
-    return mutual_info_regression(x, y)[0]
 
 
 def maximal_information_coefficient(x, y) -> Dict[str, float]:
