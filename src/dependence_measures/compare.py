@@ -98,8 +98,13 @@ def compute_bivariate_scores(df: pd.DataFrame,
 
     # Compute scores for new combinations
     if new_combinations:
+        # Extract unique column names using set comprehension
+        cols_in_new_combinations = {col for pair in new_combinations for col in pair}
+        print(cols_in_new_combinations)
+        # Select only the relevant columns from the original DataFrame
+        relevant_df = df[list(cols_in_new_combinations)]
         # Prepare arguments for compute_scores
-        args_list = [(df, input_col, output_col) for input_col, output_col in new_combinations]
+        args_list = [(relevant_df, input_col, output_col) for input_col, output_col in new_combinations]
         # Use ProcessPoolExecutor to parallelize the computation
         with ProcessPoolExecutor(max_workers=3) as executor:
             results = list(tqdm(executor.map(compute_scores, args_list),
