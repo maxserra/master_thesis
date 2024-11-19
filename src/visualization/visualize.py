@@ -150,31 +150,39 @@ def plot_scatter_with_dropdown(df: pd.DataFrame,
     fig.show()
 
 
-def plot_metric_values_and_rank(scores_df: pd.DataFrame,
-                                metrics: List[str],
-                                sort_values_by: str):
+def plot_measure_values_and_rank(measures_df: pd.DataFrame,
+                                 measures: List[str],
+                                 sort_values_by: str,
+                                 n_top: int = 10):
 
-    scores_df = scores_df[metrics].sort_values(sort_values_by, ascending=False)
+    df = measures_df.abs()
+    df = df[measures].sort_values(sort_values_by, ascending=False)
+    df = df.head(n_top)
 
-    scores_df_rank = scores_df.rank(axis=0)
+    df_rank = df.rank(axis=0, ascending=False)
 
-    fig, axis = plt.subplots(nrows=1, ncols=2, figsize=(12, 6))
+    fig, axis = plt.subplots(nrows=1, ncols=2, figsize=(14, 6))
 
-    axis[0].plot(scores_df.T,
+    axis[0].plot(df.T,
                  marker="o")
-    axis[0].set_title("Metrics value")
-    axis[0].set_xlabel("Metric")
+    axis[0].set_title("Measures value")
+    axis[0].set_xlabel("Measure of dependence")
     axis[0].set_ylabel("Value")
-    axis[1].plot(scores_df_rank.T,
-                 label=list(scores_df_rank.T.columns),
-                 marker="o")
-    axis[1].set_title("Metrics rank")
-    axis[1].set_xlabel("Metric")
-    axis[1].set_ylabel("Rank")
-    axis[1].yaxis.set_major_locator(MaxNLocator(integer=True))
-    axis[1].legend(loc="lower right")
 
-    fig.tight_layout()
+    axis[1].plot(df_rank.T,
+                 label=list(df_rank.T.columns),
+                 marker="o")
+    axis[1].set_title("Measures rank")
+    axis[1].set_xlabel("Measure of dependence")
+    axis[1].set_ylabel("Rank")
+    axis[1].yaxis.set_major_locator(MaxNLocator(integer=True, min_n_ticks=n_top-2))
+    axis[1].invert_yaxis() # Invert the y-axis to have rank 1 at the top
+
+    # Move the legend to the right of the plot
+    axis[1].legend(loc='center left', bbox_to_anchor=(1, 0.5))
+    # Adjust the layout to make room for the legend
+    fig.tight_layout(rect=[0, 0, 1, 1])
+
     return fig
 
 
