@@ -52,11 +52,12 @@ def compute_ranks_df(
 
 def compute_p_values_complete(actual_df,
                               shuffled_data_path,
-                              region: str):
+                              region: str,
+                              n_shuffles: int = 20):
 
     shuffled_measures_dfs = []
 
-    for i in range(20):
+    for i in range(n_shuffles):
         shuffled_measures_df = pd.read_csv(shuffled_data_path.joinpath(f"measures_{region}-{i}.csv"),
                                         index_col=["input", "output"])
         shuffled_measures_df = process_measures_df(shuffled_measures_df)
