@@ -100,7 +100,6 @@ def compute_bivariate_scores(df: pd.DataFrame,
     if new_combinations:
         # Extract unique column names using set comprehension
         cols_in_new_combinations = {col for pair in new_combinations for col in pair}
-        print(cols_in_new_combinations)
         # Select only the relevant columns from the original DataFrame
         relevant_df = df[list(cols_in_new_combinations)]
         # Prepare arguments for compute_scores
