@@ -5,7 +5,7 @@ import numpy as np
 from scipy.sparse.csgraph import laplacian
 from scipy.sparse.linalg import eigsh
 from sklearn.preprocessing import StandardScaler
-from sklearn.cluster import SpectralClustering, DBSCAN
+from sklearn.cluster import SpectralClustering, DBSCAN, HDBSCAN, OPTICS
 from sklearn.metrics.pairwise import rbf_kernel
 from sklearn.neighbors import NearestNeighbors
 
@@ -267,24 +267,31 @@ class DivisiveHierarchicalClustering:
             X_split_scaled = StandardScaler().fit_transform(X_split)
             
             # Generate candidate splits by varying eps
-            for eps_percentile in [80, 90, 95]:
+            for eps_percentile in [90, 95, 96, 97, 98, 99]:
                 try:
                     logging.info(f"Running density clustering with eps_percentile={eps_percentile}")
 
                     eps = self.estimate_epsilon(X_split_scaled, percentile=eps_percentile)
-                    db = DBSCAN(eps=eps, min_samples=5)
+                    db = OPTICS(
+                        # eps=eps,
+                        # min_samples=5,
+                        # algorithm="ball_tree",
+                    )
                     labels = db.fit_predict(X_split_scaled)
                     unique_labels = set(labels)
+                    print(unique_labels)
                     if len(unique_labels - {-1}) < 2:
                         continue  # Not enough clusters formed
                     # Exclude noise points
-                    if -1 in unique_labels:
-                        continue  # For simplicity, skip splits with noise
+                    # if -1 in unique_labels:
+                    #     continue  # For simplicity, skip splits with noise
                     # Map labels to 0 and 1
-                    labels = np.array([unique_labels.index(label) for label in labels])
+                    # labels = np.array([unique_labels.index(label) for label in labels])
                     candidates.append({'labels': labels, 'eps_percentile': eps_percentile})
                 except Exception as e:
+                    raise e
                     continue  # Skip this candidate if an error occurs
+
 
         else:
             raise ValueError("Invalid method. Choose 'spectral', 'partitioning' or 'density'.")
