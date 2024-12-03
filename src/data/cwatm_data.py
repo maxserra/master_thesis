@@ -41,6 +41,7 @@ def compute_ranks_df(
     
     df = df_in.copy()
     
+    df = df.abs()
     ranks_df = df.rank(axis=0,
                        method="min",
                        ascending=False).astype(int)
