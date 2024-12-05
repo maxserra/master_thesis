@@ -41,7 +41,7 @@ if __name__ == "__main__":
                                                  dst_file_path=PROCESSED_DATA_FOLDER_PATH.joinpath("bivariate_metrics", "CWatM", "measures_global.csv"),
                                                  return_all=True)
 
-    N_OF_SHUFFLES = 20
+    N_OF_SHUFFLES = 25
 
     for shuffled_id in range(N_OF_SHUFFLES):
         shuffled_data_df = utils.shuffle_data(data_df)

@@ -89,7 +89,7 @@ if __name__ == "__main__":
                                                                                                        f"measures_{region}.csv"),
                                                      return_all=True)
 
-    N_OF_SHUFFLES = 20
+    N_OF_SHUFFLES = 25
 
     REGION = "wet warm"
     compute_shuffled_scores_region(data_df=data_df,
