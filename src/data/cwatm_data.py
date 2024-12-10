@@ -54,7 +54,7 @@ def compute_ranks_df(
 def compute_p_values_complete(actual_df,
                               shuffled_data_path,
                               region: str,
-                              n_shuffles: int = 20):
+                              n_shuffles: int = 25):
 
     shuffled_measures_dfs = []
 
