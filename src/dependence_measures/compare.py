@@ -70,14 +70,18 @@ def compute_bivariate_scores(df: pd.DataFrame,
     Returns:
         pd.DataFrame: DataFrame containing the scores for the combinations.
     """
-    # Load existing DataFrame from dst_file_path if it exists
-    if os.path.exists(dst_file_path):
-        existing_df = pd.read_csv(dst_file_path, index_col=["input", "output"])
-        
-        logging.info(f"Loaded data found in {dst_file_path}")
+    if dst_file_path is not None:
+        # Load existing DataFrame from dst_file_path if it exists
+        if os.path.exists(dst_file_path):
+            existing_df = pd.read_csv(dst_file_path, index_col=["input", "output"])
+            
+            logging.info(f"Loaded data found in {dst_file_path}")
+        else:
+            logging.info(f"No previous data found, starting fresh...")
+            # Create an empty DataFrame with MultiIndex for consistency
+            existing_df = pd.DataFrame()
+            existing_df.index = pd.MultiIndex(levels=[[], []], codes=[[], []], names=['input', 'output'])
     else:
-        logging.info(f"No previous data found, starting fresh...")
-        # Create an empty DataFrame with MultiIndex for consistency
         existing_df = pd.DataFrame()
         existing_df.index = pd.MultiIndex(levels=[[], []], codes=[[], []], names=['input', 'output'])
 
@@ -94,7 +98,7 @@ def compute_bivariate_scores(df: pd.DataFrame,
     # Compute new combinations by taking the difference
     new_combinations = combinations - existing_combinations
 
-    logging.info(f"New combinations: '{new_combinations}', existing ones: '{existing_combinations}'")
+    # logging.info(f"New combinations: '{new_combinations}', existing ones: '{existing_combinations}'")
 
     # Compute scores for new combinations
     if new_combinations:
@@ -105,7 +109,7 @@ def compute_bivariate_scores(df: pd.DataFrame,
         # Prepare arguments for compute_scores
         args_list = [(relevant_df, input_col, output_col) for input_col, output_col in new_combinations]
         # Use ProcessPoolExecutor to parallelize the computation
-        with ProcessPoolExecutor(max_workers=3) as executor:
+        with ProcessPoolExecutor(max_workers=6) as executor:
             results = list(tqdm(executor.map(compute_scores, args_list),
                                 total=len(new_combinations),
                                 desc="Computing new input-output combinations"))
@@ -120,9 +124,10 @@ def compute_bivariate_scores(df: pd.DataFrame,
         # No new combinations to compute
         updated_df = existing_df
 
-    logging.info(f"Storing all data to {dst_file_path}")
-    # Store updated_df to dst_file_path
-    updated_df.to_csv(dst_file_path)
+    if dst_file_path is not None:
+        logging.info(f"Storing all data to {dst_file_path}")
+        # Store updated_df to dst_file_path
+        updated_df.to_csv(dst_file_path)
 
     # Return the desired DataFrame
     if return_all:
@@ -143,7 +148,7 @@ def compute_bivariate_scores_on_file_generator(path_rglob):
 
         data_df = pd.read_csv(file, index_col=False)
 
-        scores_df = compute_bivariate_scores(data_df, ["0"], ["1"])
+        scores_df = compute_bivariate_scores(data_df, ["0"], ["1"], dst_file_path=None, return_all=True)
         scores_df["file"] = file.name
         scores_df.set_index("file", append=False, drop=True, inplace=True)
 
