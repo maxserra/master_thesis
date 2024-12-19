@@ -1,50 +1,49 @@
 # MSc Thesis repository
+# Using information theory to identify process controls in Global Water Models
+
+This repository compiles all relevant code and data for my MSc thesis.
+
+Here I have compiled all the code; functions, scripts and notebooks written throughout this thesis. 
+
+If you are reading this without having access to the written part of the thesis itself, and you would like to read it, write me an email.
+
+### Preliminary remarks on data availability
+
+This work uses data from different sources. When looking to reporoduce some parts of the analysis you might need this data.
+
+1. Data from the previous work by Gnann, can be found in https://zenodo.org/record/7714885 and should be stored under `data/raw/ISIMIP_2b_aggregated_variables`
+2. Data specific to this thesis containing the inputs used in the ISIMIP3a run of the CWatM have been provided by Ting Tang and Yoshihide Wada (currently at KAUST). This data should be stored under `data/raw/CWatM_ISIMIP3_4Thorsten`. This raw data is, as of today, not included in this repository. However, this raw and granular data is only needed to run notebook `05-Lea-CWatM_data_processing.ipynb` and does not prevent the rest of the analysis to be run.
+3. Raw data openly available are:
+    - ISIMIP3a climatic forcings: This can be collected by executing the notebook `06-CWatM_input_data_processing.ipynb` and will be stored under `data/raw/CWatM_input`
+    - CWatM outputs under study: This can be collected by executing the notebook `07-CWatM_output_processing.ipynb` and will be stored under `data/raw/CWatM_input`
 
 
-Repository for compiling all relevant code and data for my MSc thesis
-
-## Data sources
-- https://zenodo.org/record/7714885 goes to `data/raw/ISIMIP_2b_aggregated_variables`
-- Project specific data for the ISIMIP3 runs, provided by Ting Tang Yoshihide Wada (currently at KAUST) goes to `data/raw/CWatM_ISIMIP3_4Thorsten`
-
+## How to naviagte this project
 
 ## Project Organization
 
     ├── data
-    │   ├── external       <- Data from third party sources.
-    │   ├── interim        <- Intermediate data that has been transformed.
-    │   ├── processed      <- The final, canonical data sets for modeling.
-    │   └── raw            <- The original, immutable data dump.
+    │   ├── processed      <- The final, processed data used for analysis and modeling.
+    │   └── raw            <- The original, immutable data.
     │
-    ├── docs               <- A default Sphinx project; see sphinx-doc.org for details
+    ├── notebooks          <- Jupyter notebooks used for analysis. More on these below.
     │
-    ├── models             <- Trained and serialized models, model predictions, or model summaries
+    ├── reports            <- Generated visuals for reporting
+    │   ├── figures        <- Plots and other graphical represenations
+    │   └── tables         <- Tabular represenations
     │
-    ├── notebooks          <- Jupyter notebooks. Naming convention is a number (for ordering),
-    │                         the creator's initials, and a short `-` delimited description, e.g.
-    │                         `1.0-jqp-initial-data-exploration`.
+    ├── scripts            <- Python scripts used for analysis. More on these below.
     │
-    ├── references         <- Data dictionaries, manuals, and all other explanatory materials.
-    │
-    ├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
-    │   └── figures        <- Generated graphics and figures to be used in reporting
-    │
-    ├── src                <- Source code for use in this project.
-    │   ├── __init__.py    <- Makes src a Python module
+    ├── src                <- Source code for the functions uses in this project.
+    │   ├── __init__.py    <- Makes `src` a Python module.
     │   │
-    │   ├── data           <- Scripts to download or generate data
-    │   │   └── make_dataset.py
+    │   ├── data           <- Functions to generate, process or transform data.
     │   │
-    │   ├── features       <- Scripts to turn raw data into features for modeling
-    │   │   └── build_features.py
+    │   ├── dependence_measures <- Functions to compute dependence measures.
     │   │
-    │   ├── models         <- Scripts to train models and then use trained models to make
-    │   │   │                 predictions
-    │   │   ├── predict_model.py
-    │   │   └── train_model.py
+    │   ├── models         <- Functions and classes defining self-coded models 
     │   │
-    │   └── visualization  <- Scripts to create exploratory and results oriented visualizations
-    │       └── visualize.py
+    │   └── visualization  <- Functions to create exploratory and results oriented visualizations
     │
     ├── .env               <- File with secrets to be loaded as environment variables.
     ├── .gitignore
@@ -60,5 +59,3 @@ Repository for compiling all relevant code and data for my MSc thesis
     └── tox.ini            <- tox file with settings for running tox; see tox.readthedocs.io
 
 --------
-
-<p><small>Project folder structure based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>. #cookiecutterdatascience</small></p>
