@@ -1,0 +1,51 @@
+---
+title: "SSPCA Analysis"
+author: "Your Name"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+# Introduction
+
+Something something
+
+## Get the data
+
+```{r setup}
+library(dplyr)
+library(kernlab)
+
+# Set the path to the folder containing the processed data
+processed_data_folder_path <- file.path("..", "..", "data", "processed")
+
+# Define model
+model <- "pcr-globwb"  # Set this to your model variable
+# Define input and output column names
+inputs_columns <- c("pr", "netrad")
+outputs_columns <- c("evap", "potevap", "qr", "qtot")
+
+# Read the CSV file into a data frame
+data_df <- read.csv(file.path(processed_data_folder_path, paste0("gnann_data_", model, ".csv")), stringsAsFactors = FALSE)
+
+# Assign X to be the inputs of data_df
+X <- as.matrix(data_df[1:2000, inputs_columns])
+
+# Assign y to be the outputs of data_df
+Y <- as.matrix(data_df[1:2000, outputs_columns])
+
+# Define sigma.y
+sigma.y <- sqrt(sigest(Y~X)[2]/2)
+```
+
+## Run the SSPCA function
+```{r sspca}
+source("../../src/dependence_measures/sspca.R")
+
+# Run the SSPCA function
+sspca_result <- sspca(X, Y, sigma.y, sumabsv = 1.25, K = 2)
+```
+
+```{r results}
+sspca_result$v
+```
+
